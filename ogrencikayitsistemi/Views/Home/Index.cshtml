@@ -1,0 +1,249 @@
+﻿@model List<Ogrenci>
+@{
+    ViewBag.Title = "Öğrenci Listesi";
+}
+
+<h2>Öğrenci Listesi</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+
+            <th>Ad</th> 
+            <th>Soyad</th>
+            <th>Telefon</th>
+            <th>Adres</th>
+            <th>Sınıf</th>
+        </tr>
+    </thead>
+    <tbody id="tablo"></tbody>
+</table>
+
+
+<!--Button trigger modal-->
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#ogrenciEkleModal">
+    Ekle
+</button>
+
+<!--Modal -->
+<div class="modal fade" id="ogrenciEkleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="ad">Ad</label>
+                        <input type="text" class="form-control" id="ad" name="ad" aria-describedby="emailHelp" placeholder="Adınızı Giriniz.">
+                    </div>
+                    <div class="form-group">
+                        <label for="ad">Soyad</label>
+                        <input type="text" class="form-control" id="soyad" name="soyad" aria-describedby="emailHelp" placeholder="Soyadınız Giriniz.">
+                    </div>
+                    <div class="form-group">
+                        <label for="ad">Telefon</label>
+                        <input type="text" class="form-control" id="telefon" name="telefon" aria-describedby="emailHelp" placeholder="Telefonunuzu Adresinizi Giriniz.">
+                    </div>
+                    <div class="form-group">
+                        <label for="ad">Adres</label>
+                        <input type="text" class="form-control" id="adres" name="adres" aria-describedby="emailHelp" placeholder="Adresinizi Giriniz.">
+                    </div>
+                    <div class="form-group">
+                        <label for="ad">Sınıf</label>
+                        <input type="text" class="form-control" id="sinif" name="sinif" aria-describedby="emailHelp" placeholder="Sınıfınızı Giriniz.">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button onclick="OgrenciEkle" id="btnEkle" type="button" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <
+</div>
+
+<!--Button trigger modal-->
+
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#ogrenciDuzeltModal">
+
+    <!--Modal -->
+    Düzelt
+</button>
+<div class="modal fade" id="ogrenciDuzeltModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Düzelt</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="ad">Ad</label>
+                    <input type="text" class="form-control" id="ad" name="ad" aria-describedby="emailHelp" placeholder="Adınızı Giriniz.">
+                </div>
+                <div class="form-group">
+                    <label for="ad">Soyad</label>
+                    <input type="text" class="form-control" id="soyad" name="soyad" aria-describedby="emailHelp" placeholder="Soyadınız Giriniz.">
+                </div>
+                <div class="form-group">
+                    <label for="ad">Telefon</label>
+                    <input type="text" class="form-control" id="telefon" name="telefon" aria-describedby="emailHelp" placeholder="Telefonunuzu Adresinizi Giriniz.">
+                </div>
+                <div class="form-group">
+                    <label for="ad">Adres</label>
+                    <input type="text" class="form-control" id="adres" name="adres" aria-describedby="emailHelp" placeholder="Adresinizi Giriniz.">
+                </div>
+                <div class="form-group">
+                    <label for="ad">Sınıf</label>
+                    <input type="text" class="form-control" id="sinif" name="sinif" aria-describedby="emailHelp" placeholder="Sınıfınızı Giriniz.">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button onclick="OgrenciDuzelt" id="btnDuzelt" type="button" class="btn btn-success">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Button trigger modal-->
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#ogrenciSilModal">
+    Sil
+</button>
+
+
+
+@section JSKodlari
+{
+    <script type="text/javascript">
+
+        function OgrencileriGetir() {
+            var tablo = $("#tablo");
+            tablo.empty();
+
+            $.ajax({
+                method: "GET",
+                url: "../api/HomeApi"
+            }).done(function (response) {
+
+                if (response == null)
+                    return;
+                for (var i = 0; i < response.length; i++) {
+                    var deger = response[i];
+                    var satir = "<tr><td>" + deger.ad + "</td><td>" + deger.soyad + "</td><td>" + deger.telefon + "</td><td>" + deger.adres + "</td></tr>" + deger.sinif + "</td></tr>";
+                    tablo.append(satir);
+                }
+
+
+            }).fail(function () {
+                alert("Hata oluştu.");
+            });
+        }
+
+        function OgrenciEkle() {
+            //alert("Ekle çalıştı");
+
+            var ad = $("#ad").val();
+            var soyad = $("#soyad").val();
+            var telefon = $("#telefon").val();
+            var adres = $("#adres").val();
+            var sinif = $("#sinif").val();
+
+            var ogrenci = {
+
+                "ad": ad,
+                "soyad": soyad,
+                "telefon": telefon,
+                "adres": adres,
+                "sinif": sinif
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "../api/HomeApi",
+                type: "json",
+                data: ogrenci
+            }).done(function (response, statusText, jqXHR) {
+
+                if (jqXHR.status == 201) {
+                    alert("Öğrenci Eklendi");
+                    OgrencileriGetir();
+                    $("#ogrenciEkleModal").modal("hide");
+                }
+
+                console.log(response);
+                console.log(statusText);
+                console.log(jqXHR);
+
+            }).fail(function () {
+                alert("Hata oluştu");
+            });
+        }
+
+        $(function () {
+            OgrencileriGetir();
+            $("#btnEkle").click(OgrenciEkle);
+        });
+
+
+        function OgrenciDuzelt() {
+            //alert("Duzelt çalıştı");
+
+            var ad = $("#ad").val();
+            var soyad = $("#soyad").val();
+            var telefon = $("#telefon").val();
+            var adres = $("#adres").val();
+            var sinif = $("#sinif").val();
+
+            var ogrenci = {
+
+                "ad": ad,
+                "soyad": soyad,
+                "telefon": telefon,
+                "adres": adres,
+                "sinif": sinif
+            };
+
+            $.ajax({
+                method: "PUT",
+                url: "../api/HomeApi",
+                type: "json",
+                data: ogrenci
+            }).done(function (response, statusText, jqXHR) {
+
+                if (jqXHR.status == 201) {
+                    alert("Öğrenci Düzenlendi");
+                    OgrencileriGetir();
+                    $("#ogrenciDuzenleModal").modal("hide");
+                }
+
+                console.log(response);
+                console.log(statusText);
+                console.log(jqXHR);
+
+            }).fail(function () {
+                alert("Hata oluştu");
+            });
+        }
+
+        $(function () {
+            $("#btnDuzelt").click(OgrenciDuzelt);
+        });
+
+
+
+
+
+
+    </script>
+}
